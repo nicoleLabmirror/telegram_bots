@@ -36,24 +36,28 @@ def write_itn_to_csv(file, itn_value):
         data_for_csv = csv.writer(csv_file, delimiter=",")
         data_for_csv.writerow([date, itn_value])
 
+def main():
+    itn_old = read_itn_from_csv(file)
+    itn_new = get_current_itn_value(url)
 
-itn_old = read_itn_from_csv(file)
-itn_new = get_current_itn_value(url)
+    if itn_new > itn_old:
+        itn_bot.sendMessage(
+            chat_id,
+            f"Hey Joe, bad news: {itn_old} down to {itn_new}.",
+        )
+        write_itn_to_csv(file, itn_new)
 
-if itn_new > itn_old:
-    itn_bot.sendMessage(
-        chat_id,
-        f"Hey Joe, bad news: {itn_old} down to {itn_new}.",
-    )
-    write_itn_to_csv(file, itn_new)
+    elif itn_new < itn_old:
+        itn_bot.sendMessage(
+            chat_id,
+            f"Hey Joe, good news: {itn_old} up to {itn_new}.",
+        )
+        write_itn_to_csv(file, itn_new)
 
-elif itn_new < itn_old:
-    itn_bot.sendMessage(
-        chat_id,
-        f"Hey Joe, good news: {itn_old} up to {itn_new}.",
-    )
-    write_itn_to_csv(file, itn_new)
+    else:
+        itn_bot.sendMessage(chat_id, f"Hey Joe, nothing happend.")
+        write_itn_to_csv(file, itn_new)
 
-else:
-    itn_bot.sendMessage(chat_id, f"Hey Joe, nothing happend.")
-    write_itn_to_csv(file, itn_new)
+if __name__ == '__main_':
+    main()
+    
