@@ -12,6 +12,11 @@ chat_id = "YOUR CHAT ID"
 url = "YOUR PLAYERS PROFILE"
 file = "YOUR FILE"
 
+itn_bot = tb.Bot("580953211:AAG4yN0AmaO1wFNS48Rm1CWpV3-XRDiUkTw")
+chat_id = 326247323
+
+url = "www.noetv.at/spieler/detail/mm/pi/NU33326.html"
+file = "/home/k2/Dokumente/Code/PYTHON/telegram_bots/values.csv"
 
 def get_current_itn_value(url):
     request = ul3.PoolManager().request("GET", url)
@@ -26,7 +31,7 @@ def read_itn_from_csv(file):
     with open(file, "r") as csv_file:
         data_from_csv = csv.reader(csv_file, delimiter=",")
         itn_data = [row for row in data_from_csv]
-        itn_from_file = itn_data[-1][-1]
+        itn_from_file = float(itn_data[-1][-1])
         return itn_from_file
 
 
@@ -37,7 +42,7 @@ def write_itn_to_csv(file, itn_value):
         data_for_csv.writerow([date, itn_value])
 
 
-itn_old = float(read_itn_from_csv(file))
+itn_old = read_itn_from_csv(file)
 itn_new = get_current_itn_value(url)
 
 if itn_new > itn_old:
