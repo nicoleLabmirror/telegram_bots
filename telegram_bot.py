@@ -10,7 +10,6 @@ chat_id = "YOUR CHAT ID"
 url = "YOUR PLAYERS PROFILE"
 file = "YOUR FILE"
 
-
 def get_current_itn_value(url):
     request = ul3.PoolManager().request("GET", url)
     itn_from_web = bs.BeautifulSoup(request.data, "html.parser").find_all(
@@ -38,17 +37,17 @@ itn_new = get_current_itn_value(url)
 if itn_new > itn_old:
     itn_bot.sendMessage(
         chat_id,
-        "Hey Joe,\nbad news:\n {} auf {}.".format(itn_old, itn_new),
+        f"Hey Joe, bad news: {itn_old} down to {itn_new}.",
     )
     write_itn_to_csv(file, itn_new)
 
 elif itn_new < itn_old:
     itn_bot.sendMessage(
         chat_id,
-        "Hey Joe, \ngood news:\n {} up to {}.".format(itn_old, itn_new),
+        f"Hey Joe, good news: {itn_old} up to {itn_new}.",
     )
     write_itn_to_csv(file, itn_new)
 
 else:
-    itn_bot.sendMessage(chat_id, "Hey Joe, nothing happend.")
+    itn_bot.sendMessage(chat_id, f"Hey Joe, nothing happend.")
     write_itn_to_csv(file, itn_new)
