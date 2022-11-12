@@ -40,7 +40,7 @@ def write_itn_to_csv(file, itn_value):
 
 def main():
     itn_old = read_itn_from_csv(file)
-    itn_new = get_current_itn_value(url)
+    itn_new = scrap_current_itn_value()
 
     if itn_new > itn_old:
         itn_bot.sendMessage(
