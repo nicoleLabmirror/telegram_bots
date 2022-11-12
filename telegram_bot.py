@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 
+import csv
 import datetime as dt
+
 import bs4 as bs
 import telepot as tb
 import urllib3 as ul3
@@ -21,15 +23,18 @@ def get_current_itn_value(url):
 
 
 def read_itn_from_csv(file):
-    with open(file, "r") as f:
-        itn_from_file = f.read()[-6:]
-    return itn_from_file
+    with open(file, "r") as csv_file:
+        data_from_csv = csv.reader(csv_file, delimiter=",")
+        itn_data = [row for row in data_from_csv]
+        itn_from_file = itn_data[-1][-1]
+        return itn_from_file
 
 
 def write_itn_to_csv(file, itn_value):
     date = dt.date.today()
-    with open(file, "a") as f:
-        f.write(str(date) + "," + str(itn_value) + "\n")
+    with open(file, "a") as csv_file:
+        data_for_csv = csv.writer(csv_file, delimiter=",")
+        data_for_csv.writerow([date, itn_value])
 
 
 itn_old = float(read_itn_from_csv(file))
