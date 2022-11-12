@@ -10,6 +10,7 @@ chat_id = "YOUR CHAT ID"
 url = "YOUR PLAYERS PROFILE"
 file = "YOUR FILE"
 
+
 def get_current_itn_value(url):
     request = ul3.PoolManager().request("GET", url)
     itn_from_web = bs.BeautifulSoup(request.data, "html.parser").find_all(
