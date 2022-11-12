@@ -26,6 +26,7 @@ def read_itn_from_csv(file):
     with open(file, "r") as csv_file:
         data_from_csv = csv.reader(csv_file, delimiter=",")
         itn_data = [row for row in data_from_csv]
+        # TODO read last row and last element?
         itn_from_file = float(itn_data[-1][-1])
         return itn_from_file
 
