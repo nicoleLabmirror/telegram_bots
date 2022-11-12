@@ -13,7 +13,7 @@ url = "YOUR PLAYERS PROFILE"
 file = "YOUR FILE"
 
 
-def get_current_itn_value(url):
+def scrap_current_itn_value(url):
     request = ul3.PoolManager().request("GET", url)
     itn_from_web = bs.BeautifulSoup(request.data, "html.parser").find_all(
         "td", {"class": "text-right"}
