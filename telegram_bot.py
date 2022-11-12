@@ -36,6 +36,7 @@ def write_itn_to_csv(file, itn_value):
         data_for_csv = csv.writer(csv_file, delimiter=",")
         data_for_csv.writerow([date, itn_value])
 
+
 def main():
     itn_old = read_itn_from_csv(file)
     itn_new = get_current_itn_value(url)
@@ -58,6 +59,6 @@ def main():
         itn_bot.sendMessage(chat_id, f"Hey Joe, nothing happend.")
         write_itn_to_csv(file, itn_new)
 
-if __name__ == '__main_':
+
+if __name__ == "__main_":
     main()
-    
