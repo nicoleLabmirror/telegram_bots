@@ -10,12 +10,6 @@ chat_id = "YOUR CHAT ID"
 url = "YOUR PLAYERS PROFILE"
 file = "YOUR FILE"
 
-itn_bot = tb.Bot("580953211:AAG4yN0AmaO1wFNS48Rm1CWpV3-XRDiUkTw")
-chat_id = 326247323
-
-url = "www.noetv.at/spieler/detail/mm/pi/NU33326.html"
-file = "/home/k2/Dokumente/Code/PYTHON/telegram_bots/values.csv"
-
 
 def get_current_itn_value(url):
     request = ul3.PoolManager().request("GET", url)
