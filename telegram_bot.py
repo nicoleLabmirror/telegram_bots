@@ -9,7 +9,7 @@ import urllib3 as ul3
 
 itn_bot = tb.Bot("YOUR BOT TOKEN")
 chat_id = "YOUR CHAT ID"
-profile_url= "YOUR PLAYERS PROFILE"
+profile_url = "YOUR PLAYERS PROFILE"
 file_name = "YOUR FILE"
 
 
