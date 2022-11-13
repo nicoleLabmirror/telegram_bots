@@ -58,7 +58,7 @@ def main():
     else:
         itn_bot.sendMessage(
             chat_id,
-            f"Hey Joe, nothing happend."
+            f"Hey Joe, nothing happened."
         )
         write_itn_to_csv(file, itn_new)
 
