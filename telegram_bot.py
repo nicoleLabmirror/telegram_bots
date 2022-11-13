@@ -44,19 +44,22 @@ def main():
     if itn_new > itn_old:
         itn_bot.sendMessage(
             chat_id,
-            f"Hey Joe, bad news: {itn_old} down to {itn_new}.",
+            f"Hey Joe, bad news: {itn_old} down to {itn_new}."
         )
         write_itn_to_csv(file, itn_new)
 
     elif itn_new < itn_old:
         itn_bot.sendMessage(
             chat_id,
-            f"Hey Joe, good news: {itn_old} up to {itn_new}.",
+            f"Hey Joe, good news: {itn_old} up to {itn_new}."
         )
         write_itn_to_csv(file, itn_new)
 
     else:
-        itn_bot.sendMessage(chat_id, f"Hey Joe, nothing happend.")
+        itn_bot.sendMessage(
+            chat_id,
+            f"Hey Joe, nothing happend."
+        )
         write_itn_to_csv(file, itn_new)
 
 
