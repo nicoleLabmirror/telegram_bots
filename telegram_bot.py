@@ -9,8 +9,8 @@ import urllib3 as ul3
 
 itn_bot = tb.Bot("YOUR BOT TOKEN")
 chat_id = "YOUR CHAT ID"
-url = "YOUR PLAYERS PROFILE"
-file = "YOUR FILE"
+profile_url= "YOUR PLAYERS PROFILE"
+file_name = "YOUR FILE"
 
 
 def scrap_current_itn_value(url):
@@ -38,9 +38,9 @@ def write_itn_to_csv(file, itn_value):
 
 
 def main():
-    itn_old = read_itn_from_csv(file)
-    itn_new = scrap_current_itn_value(url)
-    write_itn_to_csv(file, itn_new)
+    itn_old = read_itn_from_csv(file_name)
+    itn_new = scrap_current_itn_value(profile_url)
+    write_itn_to_csv(file_name, itn_new)
 
     if itn_new > itn_old:
         itn_bot.sendMessage(
