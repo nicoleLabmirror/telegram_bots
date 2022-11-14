@@ -18,6 +18,7 @@ def get_monthly_expenses(file):
 
     return df_budget_result
 
+# Callback? Dunno ... still researching :D
 def get_sum_of_expenses(file):
     monthly_expenses = get_monthly_expenses(file)
     total_amount_expenses = monthly_expenses.Amount.sum()
