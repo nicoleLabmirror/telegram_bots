@@ -51,8 +51,7 @@ def write_data_to_file():
     # TODO Still using test data here ;)
     df_new_entry = pd.DataFrame({"Date": date, "Shop": "BIPA", "Amount": [42.00]})
 
-    # TODO FutureWarning: replace pandas.append and use pandas.concat instead
-    df_budget = df_budget.append(df_new_entry, ignore_index=True)
+    df_budget = pd.concat([df_budget, df_new_entry], ignore_index=True)
     df_budget.to_csv(file_name, index=False, header=False)
 
 
