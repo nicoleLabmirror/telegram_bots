@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import datetime as dt
+
 import pandas as pd
 
 file_name = "YOUR FILE"
@@ -44,9 +45,21 @@ def get_expenses_for_each_shop():
     return monthly_expenses_per_shop
 
 
+def write_data_to_file():
+    df_budget = get_data_from_file(file_name)
+
+    # TODO Still using test data here ;)
+    df_new_entry = pd.DataFrame({"Date": date, "Shop": "BIPA", "Amount": [42.00]})
+
+    # TODO FutureWarning: replace pandas.append and use pandas.concat instead
+    df_budget = df_budget.append(df_new_entry, ignore_index=True)
+    df_budget.to_csv(file_name, index=False, header=False)
+
+
 def main():
     total_amount_expenses = get_sum_of_expenses()
     monthly_expenses_per_shop = get_expenses_for_each_shop()
+    write_data_to_file()
     return total_amount_expenses, monthly_expenses_per_shop
 
 
