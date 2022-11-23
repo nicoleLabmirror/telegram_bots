@@ -45,21 +45,37 @@ def get_expenses_for_each_shop():
     return monthly_expenses_per_shop
 
 
-def write_data_to_file():
+def write_data_to_file(input_list):
     df_budget = get_data_from_file(file_name)
 
-    # TODO Still using test data here ;)
-    df_new_entry = pd.DataFrame({"Date": date, "Shop": "BIPA", "Amount": [42.00]})
+    df_new_entry = pd.DataFrame(
+        {"Date": date, "Shop": input_list[0], "Amount": [input_list[1]]}
+    )
 
     df_budget = pd.concat([df_budget, df_new_entry], ignore_index=True)
     df_budget.to_csv(file_name, index=False, header=False)
 
 
+# TODO add user_profile
+def handle_user_input(user_input):
+    if user_input == "?":
+        get_sum_of_expenses()
+    else:
+        user_input_list = user_input.split()
+        user_input_list = [
+            user_input_list[0],
+            float(user_input_list[1].replace(",", ".")),
+        ]
+        write_data_to_file(user_input_list)
+
+
 def main():
-    total_amount_expenses = get_sum_of_expenses()
-    monthly_expenses_per_shop = get_expenses_for_each_shop()
-    write_data_to_file()
-    return total_amount_expenses, monthly_expenses_per_shop
+    #   TESTING lol
+    #    total_amount_expenses = get_sum_of_expenses()
+    #    monthly_expenses_per_shop = get_expenses_for_each_shop()
+    #    write_data_to_file()
+    #    return total_amount_expenses, monthly_expenses_per_shop
+    handle_user_input("Billa 43,00")
 
 
 if __name__ == "__main__":
