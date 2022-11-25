@@ -5,6 +5,7 @@ import datetime as dt
 import pandas as pd
 
 file_name = "YOUR FILE"
+file_name = "/home/k2/Dokumente/Code/PYTHON/bots/botToado2/toadoHaushalt_K.csv"
 date = dt.date.today()
 
 
@@ -17,11 +18,12 @@ def get_data_from_file(file):
 
 def get_monthly_expenses():
     df_budget = get_data_from_file(file_name)
-    df_budget.month = pd.DatetimeIndex(df_budget["Date"]).month
-    df_budget_result = df_budget[df_budget.month == date.month]
 
-    df_budget_result.year = pd.DatetimeIndex(df_budget_result["Date"]).year
-    df_budget_result = df_budget_result[df_budget_result.year == date.year]
+    df_budget["month"] = pd.DatetimeIndex(df_budget["Date"]).month
+    df_budget_month = df_budget[df_budget["month"] == date.month]
+
+    df_budget_month["year"] = pd.DatetimeIndex(df_budget_month["Date"]).year
+    df_budget_result = df_budget_month[df_budget_month["year"] == date.year]
 
     return df_budget_result
 
@@ -61,9 +63,11 @@ def write_data_to_file(input_list):
 # TODO add user_profile
 def handle_user_input(user_input):
     if user_input == "?":
-        get_sum_of_expenses()
-        get_monthly_expenses()
-        get_expenses_for_each_shop()
+        print(
+            get_sum_of_expenses(),
+            get_monthly_expenses(),
+            get_expenses_for_each_shop()
+        )
     else:
         user_input_list = user_input.split()
         user_input_list = [
