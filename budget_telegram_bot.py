@@ -35,7 +35,9 @@ def get_sum_of_expenses():
 
 def get_expenses_for_each_shop():
     monthly_expenses = get_monthly_expenses()
-    monthly_expenses_groupby = monthly_expenses.groupby(["Shop"]).sum(numeric_only=True).reset_index()
+    monthly_expenses_groupby = (
+        monthly_expenses.groupby(["Shop"]).sum(numeric_only=True).reset_index()
+    )
 
     monthly_expenses_per_shop = [
         [monthly_expenses_groupby.Shop[entry], monthly_expenses_groupby.Amount[entry]]
