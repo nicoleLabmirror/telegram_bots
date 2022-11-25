@@ -35,7 +35,7 @@ def get_sum_of_expenses():
 
 def get_expenses_for_each_shop():
     monthly_expenses = get_monthly_expenses()
-    monthly_expenses_groupby = monthly_expenses.groupby(["Shop"]).sum().reset_index()
+    monthly_expenses_groupby = monthly_expenses.groupby(["Shop"]).sum(numeric_only=True).reset_index()
 
     monthly_expenses_per_shop = [
         [monthly_expenses_groupby.Shop[entry], monthly_expenses_groupby.Amount[entry]]
@@ -60,6 +60,8 @@ def write_data_to_file(input_list):
 def handle_user_input(user_input):
     if user_input == "?":
         get_sum_of_expenses()
+        get_monthly_expenses()
+        get_expenses_for_each_shop()
     else:
         user_input_list = user_input.split()
         user_input_list = [
@@ -70,12 +72,13 @@ def handle_user_input(user_input):
 
 
 def main():
-    #   TESTING lol
+    # TESTING lol
     #    total_amount_expenses = get_sum_of_expenses()
     #    monthly_expenses_per_shop = get_expenses_for_each_shop()
     #    write_data_to_file()
     #    return total_amount_expenses, monthly_expenses_per_shop
     handle_user_input("Billa 43,00")
+    handle_user_input("?")
 
 
 if __name__ == "__main__":
