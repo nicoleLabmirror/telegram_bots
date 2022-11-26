@@ -5,7 +5,6 @@ import datetime as dt
 import pandas as pd
 
 file_name = "YOUR FILE"
-file_name = "/home/k2/Dokumente/Code/PYTHON/bots/botToado2/toadoHaushalt_test.csv"
 headers = ["Date", "Category", "Shop", "Amount"]
 date = dt.date.today()
 
