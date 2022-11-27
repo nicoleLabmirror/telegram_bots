@@ -29,6 +29,7 @@ def get_monthly_expenses():
 
 def get_sum_of_expenses():
     monthly_expenses = get_monthly_expenses()
+
     total_amount_expenses = monthly_expenses.Amount.sum()
 
     return total_amount_expenses
