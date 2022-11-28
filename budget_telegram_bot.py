@@ -4,19 +4,27 @@ import datetime as dt
 
 import pandas as pd
 
-file_name = "YOUR FILE"
+import telepot as tb
+import telepot.aio.loop
+import telepot.loop
+
+
 headers = ["Date", "Category", "Shop", "Amount"]
 date = dt.date.today()
 
+profile = {
+    "file_name": "YOUR FILE"
+}
 
-def get_data_from_file(file):
+
+def read_data_from_file(file):
     df_budget = pd.read_csv(file, delimiter=",", names=headers)
 
     return df_budget
 
 
-def get_monthly_expenses():
-    df_budget = get_data_from_file(file_name)
+def get_monthly_expenses(file):
+    df_budget = read_data_from_file(file)
 
     index_month = pd.DatetimeIndex(df_budget["Date"]).month
     df_budget_month = df_budget[index_month == date.month]
@@ -27,26 +35,26 @@ def get_monthly_expenses():
     return df_budget_result
 
 
-def get_sum_of_expenses():
-    monthly_expenses = get_monthly_expenses()
+def get_sum_of_expenses(file):
+    monthly_expenses = get_monthly_expenses(file)
 
     total_amount_expenses = monthly_expenses.Amount.sum()
 
     return total_amount_expenses
 
 
-def get_expenses_for_one_category(category_name):
-    monthly_expenses = get_monthly_expenses()
+def get_expenses_for_one_category(file, category):
+    monthly_expenses = get_monthly_expenses(file)
 
     monthly_expenses_for_category = monthly_expenses[
-        monthly_expenses["Category"] == category_name
+        monthly_expenses["Category"] == category
     ]
 
     return monthly_expenses_for_category
 
 
-def get_expenses_for_shops_of_one_category(input_category):
-    monthly_expenses = get_expenses_for_one_category(input_category)
+def get_expenses_for_shops_of_one_category(file, category):
+    monthly_expenses = get_expenses_for_one_category(file, category)
 
     monthly_expenses_group_by = (
         monthly_expenses.groupby(["Shop"]).sum(numeric_only=True).reset_index()
@@ -60,46 +68,45 @@ def get_expenses_for_shops_of_one_category(input_category):
     return monthly_expenses_for_shops
 
 
-def write_data_to_file(input_list):
-    df_budget = get_data_from_file(file_name)
+def write_data_to_file(file, user_input):
+    df_budget = read_data_from_file(file)
 
     df_new_entry = pd.DataFrame(
         {
             "Date": date,
-            "Category": input_list[0],
-            "Shop": input_list[1],
-            "Amount": [input_list[2]],
+            "Category": user_input[0],
+            "Shop": user_input[1],
+            "Amount": [user_input[2]],
         }
     )
 
     df_budget = pd.concat([df_budget, df_new_entry], ignore_index=True)
 
-    df_budget.to_csv(file_name, index=False, header=False)
+    df_budget.to_csv(file, index=False, header=False)
 
 
-# TODO add user_profile
-def handle_user_input(user_input):
+def handle_user_input(user_profile, user_input):
     if "?" in user_input:
+        file = user_profile["file_name"]
         category = user_input.split("?")[0]
-        print(get_expenses_for_shops_of_one_category(category))
+        print(get_expenses_for_shops_of_one_category(file, category))
+        print(get_sum_of_expenses(file))
 
     else:
-        user_input_list = [
+        file = user_profile["file_name"]
+        user_input = [
             user_input.split()[0],
             user_input.split()[1],
             float(user_input.split()[2].replace(",", ".")),
         ]
-        write_data_to_file(user_input_list)
+        write_data_to_file(file, user_input)
 
 
 def main():
-    # TESTING lol
-    handle_user_input("Haushalt?")
-    handle_user_input("Haushalt Hofer 0,01")
-    handle_user_input("Haushalt?")
-    handle_user_input("Auto?")
-    handle_user_input("Auto Shell 13,37")
-    handle_user_input("Auto?")
+    # TESTING
+    handle_user_input(profile, "Auto?")
+    handle_user_input(profile, "Auto Shell 13,37")
+    handle_user_input(profile, "Auto?")
 
 
 if __name__ == "__main__":
