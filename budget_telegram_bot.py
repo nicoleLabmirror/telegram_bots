@@ -12,8 +12,12 @@ import telepot.loop
 headers = ["Date", "Category", "Shop", "Amount"]
 date = dt.date.today()
 
-profile = {
+profile_1 = {
     "file_name": "YOUR FILE"
+}
+
+profile_2 = {
+    "file_name": "ANOTHER FILE"
 }
 
 
@@ -104,9 +108,10 @@ def handle_user_input(user_profile, user_input):
 
 def main():
     # TESTING
-    handle_user_input(profile, "Auto?")
-    handle_user_input(profile, "Auto Shell 13,37")
-    handle_user_input(profile, "Auto?")
+    handle_user_input(profile_1, "Auto?")
+    handle_user_input(profile_1, "Auto Shell 13,37")
+    handle_user_input(profile_2, "Auto?")
+    handle_user_input(profile_2, "Auto Jet 42,00")
 
 
 if __name__ == "__main__":
