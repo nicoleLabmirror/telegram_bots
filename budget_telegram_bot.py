@@ -90,14 +90,16 @@ def write_data_to_file(file, user_input):
 
 
 def handle_user_input(user_profile, user_input):
-    if "?" in user_input:
-        file = user_profile["file_name"]
-        category = user_input.split("?")[0]
-        print(get_expenses_for_shops_of_one_category(file, category))
+    file = user_profile["file_name"]
+
+    if user_input == "?":
         print(get_sum_of_expenses(file))
 
+    elif "?" in user_input:
+        category = user_input.split("?")[0]
+        print(get_expenses_for_shops_of_one_category(file, category))
+
     else:
-        file = user_profile["file_name"]
         user_input = [
             user_input.split()[0],
             user_input.split()[1],
@@ -112,6 +114,8 @@ def main():
     handle_user_input(profile_1, "Auto Shell 13,37")
     handle_user_input(profile_2, "Auto?")
     handle_user_input(profile_2, "Auto Jet 42,00")
+    handle_user_input(profile_2, "?")
+    handle_user_input(profile_1, "?")
 
 
 if __name__ == "__main__":
