@@ -101,11 +101,13 @@ def handle_user_input(user_profile, user_input):
     file = user_profile["file_name"]
 
     if user_input == "?":
-        print(get_sum_of_expenses(file))
+        data_to_send = get_sum_of_expenses(file)
+        send_message(data_to_send)
 
     elif "?" in user_input:
         category = user_input.split("?")[0]
-        print(get_expenses_for_shops_of_one_category(file, category))
+        data_to_send = get_expenses_for_shops_of_one_category(file, category)
+        send_message(data_to_send)
 
     else:
         user_input = [
