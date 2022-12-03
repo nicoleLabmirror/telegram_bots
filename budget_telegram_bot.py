@@ -89,6 +89,14 @@ def write_data_to_file(file, user_input):
     df_budget.to_csv(file, index=False, header=False)
 
 
+def send_message(data_to_send):
+    if isinstance(data_to_send, float):
+        print(f"Total expenses: {data_to_send}")
+    else:
+        for i in data_to_send:
+            print(f"{i[0]}: {i[1]}")
+
+
 def handle_user_input(user_profile, user_input):
     file = user_profile["file_name"]
 
