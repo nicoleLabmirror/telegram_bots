@@ -27,17 +27,19 @@ def read_data_from_file(file):
     return df_budget
 
 
-def get_monthly_expenses(file):
+def get_monthly_expenses(file, category):
     df_budget = read_data_from_file(file)
 
-    index_month = pd.DatetimeIndex(df_budget["Date"]).month
-    df_budget_month = df_budget[index_month == date.month]
+    index_year = pd.DatetimeIndex(df_budget["Date"]).year
+    df_budget_year = df_budget[index_year == date.year]
 
-    index_year = pd.DatetimeIndex(df_budget_month["Date"]).year
-    df_budget_result = df_budget_month[index_year == date.year]
+    if category == "Auto":
+        return df_budget_year
 
-    return df_budget_result
+    index_month = pd.DatetimeIndex(df_budget_year["Date"]).month
+    df_budget_month = df_budget_year[index_month == date.month]
 
+    return df_budget_month
 
 def get_sum_of_expenses(file):
     monthly_expenses = get_monthly_expenses(file)
@@ -48,7 +50,15 @@ def get_sum_of_expenses(file):
 
 
 def get_expenses_for_one_category(file, category):
-    monthly_expenses = get_monthly_expenses(file)
+    monthly_expenses = get_monthly_expenses(file, category)
+
+    total_amount_expenses = monthly_expenses.Amount.sum()
+
+    return total_amount_expenses
+
+
+def get_expenses_for_one_category(file, category):
+    monthly_expenses = get_monthly_expenses(file, category)
 
     monthly_expenses_for_category = monthly_expenses[
         monthly_expenses["Category"] == category
@@ -120,12 +130,12 @@ def handle_user_input(user_profile, user_input):
 
 def main():
     # TESTING
-    handle_user_input(profile_1, "Auto?")
-    handle_user_input(profile_1, "Auto Shell 13,37")
     handle_user_input(profile_2, "Auto?")
-    handle_user_input(profile_2, "Auto Jet 42,00")
-    handle_user_input(profile_2, "?")
-    handle_user_input(profile_1, "?")
+    #handle_user_input(profile_1, "Auto Shell 13,37")
+    handle_user_input(profile_2, "Haushalt?")
+    #handle_user_input(profile_2, "Auto Jet 42,00")
+    #handle_user_input(profile_2, "?")
+    #handle_user_input(profile_1, "?")
 
 
 if __name__ == "__main__":
