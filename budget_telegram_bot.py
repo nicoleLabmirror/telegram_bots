@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 import datetime as dt
-
 import pandas as pd
 
 import telepot as tb
@@ -12,13 +11,9 @@ import telepot.loop
 headers = ["Date", "Category", "Shop", "Amount"]
 date = dt.date.today()
 
-profile_1 = {
-    "file_name": "YOUR FILE"
-}
+profile_1 = {"file_name": "YOUR FILE", "chat_id": "YOUR CHAT ID"}
 
-profile_2 = {
-    "file_name": "ANOTHER FILE"
-}
+profile_2 = {"file_name": "ANOTHER FILE", "chat_id": "ANOTHER CHAT ID"}
 
 
 def read_data_from_file(file):
@@ -40,13 +35,6 @@ def get_monthly_expenses(file, category):
     df_budget_month = df_budget_year[index_month == date.month]
 
     return df_budget_month
-
-def get_sum_of_expenses(file):
-    monthly_expenses = get_monthly_expenses(file)
-
-    total_amount_expenses = monthly_expenses.Amount.sum()
-
-    return total_amount_expenses
 
 
 def get_expenses_for_one_category(file, category):
@@ -75,7 +63,12 @@ def get_expenses_for_shops_of_one_category(file, category):
     )
 
     monthly_expenses_for_shops = [
-        [monthly_expenses_group_by.Shop[entry], monthly_expenses_group_by.Amount[entry]]
+        ": ".join(
+            [
+                monthly_expenses_group_by.Shop[entry],
+                str(monthly_expenses_group_by.Amount[entry]),
+            ]
+        )
         for entry in range(len(monthly_expenses_group_by))
     ]
 
@@ -99,25 +92,22 @@ def write_data_to_file(file, user_input):
     df_budget.to_csv(file, index=False, header=False)
 
 
-def send_message(data_to_send):
-    if isinstance(data_to_send, float):
-        print(f"Total expenses: {data_to_send}")
+def send_message(chat_id, data_to_send, category):
+    YOUR_BOT.sendMessage(chat_id, category)
+    if data_to_send == []:
+        YOUR_BOT.sendMessage(chat_id, "lol")
     else:
-        for i in data_to_send:
-            print(f"{i[0]}: {i[1]}")
+        YOUR_BOT.sendMessage(chat_id, "\n".join(data_to_send))
 
 
 def handle_user_input(user_profile, user_input):
     file = user_profile["file_name"]
+    chat_id = user_profile["chat_id"]
 
-    if user_input == "?":
-        data_to_send = get_sum_of_expenses(file)
-        send_message(data_to_send)
-
-    elif "?" in user_input:
+    if "?" in user_input:
         category = user_input.split("?")[0]
         data_to_send = get_expenses_for_shops_of_one_category(file, category)
-        send_message(data_to_send)
+        send_message(chat_id, data_to_send, category)
 
     else:
         user_input = [
@@ -130,12 +120,13 @@ def handle_user_input(user_profile, user_input):
 
 def main():
     # TESTING
+    handle_user_input(profile_1, "Auto?")
+    handle_user_input(profile_1, "Haushalt?")
+    handle_user_input(profile_2, "Auto Billa 13,037")
+
     handle_user_input(profile_2, "Auto?")
-    #handle_user_input(profile_1, "Auto Shell 13,37")
     handle_user_input(profile_2, "Haushalt?")
-    #handle_user_input(profile_2, "Auto Jet 42,00")
-    #handle_user_input(profile_2, "?")
-    #handle_user_input(profile_1, "?")
+    handle_user_input(profile_2, "Auto Jet 42,00")
 
 
 if __name__ == "__main__":
