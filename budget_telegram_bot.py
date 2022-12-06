@@ -100,7 +100,6 @@ def write_data_to_file(file, user_input):
 
 
 def send_message(chat_id, data_to_send, category=""):
-    #if data_to_send == []:
     if not data_to_send:
         YOUR_BOT.sendMessage(
             chat_id, f"There are no entries for category {category} "
