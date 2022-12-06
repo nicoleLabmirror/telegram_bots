@@ -105,7 +105,7 @@ def send_message(chat_id, data_to_send, category=""):
             chat_id, f"There are no entries for category {category} "
         )
     elif category == "":
-        YOUR_BOT.sendMessage(chat_id, f"lol {data_to_send}")
+        YOUR_BOT.sendMessage(chat_id, f"Oh .. {data_to_send}")
     else:
         data_of_shops_to_send = "\n".join(data_to_send)
         YOUR_BOT.sendMessage(
