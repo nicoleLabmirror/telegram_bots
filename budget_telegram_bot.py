@@ -102,15 +102,21 @@ def write_data_to_file(file, user_input):
 def send_message(chat_id, data_to_send, category=""):
     if not data_to_send:
         YOUR_BOT.sendMessage(
-            chat_id, f"There are no entries for category {category} "
+            chat_id,
+            f"There are no entries for category {category}."
         )
+
     elif category == "":
-        YOUR_BOT.sendMessage(chat_id, f"Oh .. {data_to_send}")
+        YOUR_BOT.sendMessage(
+            chat_id,
+            f"Oh .. {data_to_send}"
+        )
+
     else:
         data_of_shops_to_send = "\n".join(data_to_send)
         YOUR_BOT.sendMessage(
             chat_id,
-            f"There are following entries for category {category}:\n{data_of_shops_to_send}",
+            f"There are following entries for category {category}:\n{data_of_shops_to_send}"
         )
 
 
@@ -139,6 +145,7 @@ def handle_user_input(user_profile, user_input):
 def get_user_input(msg):
     if msg["from"]["id"] == profile_1["chat_id"]:
         handle_user_input(profile_1, msg["text"])
+
     elif msg["from"]["id"] == profile_2["chat_id"]:
         handle_user_input(profile_2, msg["text"])
 
