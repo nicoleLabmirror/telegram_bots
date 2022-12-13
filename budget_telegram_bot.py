@@ -6,6 +6,7 @@ import time as t
 import pandas as pd
 import telepot.aio.loop
 import telepot.loop
+import telepot as tb
 
 headers = ["Date", "Category", "Shop", "Amount"]
 date = dt.date.today()
@@ -13,14 +14,19 @@ date = dt.date.today()
 profile_1 = {
     "file_name": "YOUR FILE",
     "chat_id": "YOUR CHAT ID",
-    "thank_you": "Nice"
+    "thank_you": "Nice",
+    "input": "VERY NICE"
 }
 
 profile_2 = {
     "file_name": "ANOTHER FILE",
     "chat_id": "ANOTHER CHAT ID",
     "thank_you": "Thx",
+    "input": "VERY THX"
 }
+
+YOUR_BOT = tb.Bot("YOUR_BOT_TOKEN")
+YOUR_BOT.getMe()
 
 
 def read_data_from_file(file):
@@ -42,14 +48,6 @@ def get_monthly_expenses(file, category):
     df_budget_month = df_budget_year[index_month == date.month]
 
     return df_budget_month
-
-
-def get_expenses_for_one_category(file, category):
-    monthly_expenses = get_monthly_expenses(file, category)
-
-    total_amount_expenses = monthly_expenses.Amount.sum()
-
-    return total_amount_expenses
 
 
 def get_expenses_for_one_category(file, category):
@@ -106,10 +104,16 @@ def send_message(chat_id, data_to_send, category=""):
             f"There are no entries for category {category}."
         )
 
-    elif category == "":
+    elif category == "thanks":
         YOUR_BOT.sendMessage(
             chat_id,
-            f"Oh .. {data_to_send}"
+            f"{data_to_send}"
+        )
+
+    elif category == "input":
+        YOUR_BOT.sendMessage(
+            chat_id,
+            f"{data_to_send}"
         )
 
     else:
@@ -131,15 +135,19 @@ def handle_user_input(user_profile, user_input):
 
     elif "Thanks" in user_input:
         data_to_send = user_profile["thank_you"]
-        send_message(user_chat_id, data_to_send)
+        category = "thanks"
+        send_message(user_chat_id, data_to_send, category)
 
     else:
+        category = "input"
+        data_to_send = user_profile["input"]
         user_input = [
             user_input.split()[0],
             user_input.split()[1],
             float(user_input.split()[2].replace(",", ".")),
         ]
         write_data_to_file(file, user_input)
+        send_message(user_chat_id, data_to_send, category)
 
 
 def get_user_input(msg):
