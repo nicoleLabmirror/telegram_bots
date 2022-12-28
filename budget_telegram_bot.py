@@ -4,12 +4,11 @@ import datetime as dt
 import time as t
 
 import pandas as pd
+import telepot as tb
 import telepot.aio.loop
 import telepot.loop
-import telepot as tb
 
 headers = ["Date", "Category", "Shop", "Amount"]
-date = dt.date.today()
 
 profile_1 = {
     "file_name": "YOUR FILE",
@@ -37,15 +36,16 @@ def read_data_from_file(file):
 
 def get_monthly_expenses(file, category):
     df_budget = read_data_from_file(file)
+    today = dt.date.today()
 
     index_year = pd.DatetimeIndex(df_budget["Date"]).year
-    df_budget_year = df_budget[index_year == date.year]
+    df_budget_year = df_budget[index_year == today.year]
 
     if category == "Auto":
         return df_budget_year
 
     index_month = pd.DatetimeIndex(df_budget_year["Date"]).month
-    df_budget_month = df_budget_year[index_month == date.month]
+    df_budget_month = df_budget_year[index_month == today.month]
 
     return df_budget_month
 
@@ -82,10 +82,11 @@ def get_expenses_for_shops_of_one_category(file, category):
 
 def write_data_to_file(file, user_input):
     df_budget = read_data_from_file(file)
+    today = dt.date.today()
 
     df_new_entry = pd.DataFrame(
         {
-            "Date": date,
+            "Date": today,
             "Category": user_input[0],
             "Shop": user_input[1],
             "Amount": [user_input[2]],
