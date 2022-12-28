@@ -4,9 +4,9 @@ import datetime as dt
 import time as t
 
 import pandas as pd
+import telepot as tb
 import telepot.aio.loop
 import telepot.loop
-import telepot as tb
 
 headers = ["Date", "Category", "Shop", "Amount"]
 
