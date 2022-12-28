@@ -15,14 +15,14 @@ profile_1 = {
     "file_name": "YOUR FILE",
     "chat_id": "YOUR CHAT ID",
     "thank_you": "Nice",
-    "input": "VERY NICE"
+    "input": "VERY NICE",
 }
 
 profile_2 = {
     "file_name": "ANOTHER FILE",
     "chat_id": "ANOTHER CHAT ID",
     "thank_you": "Thx",
-    "input": "VERY THX"
+    "input": "VERY THX",
 }
 
 YOUR_BOT = tb.Bot("YOUR_BOT_TOKEN")
@@ -99,28 +99,19 @@ def write_data_to_file(file, user_input):
 
 def send_message(chat_id, data_to_send, category=""):
     if not data_to_send:
-        YOUR_BOT.sendMessage(
-            chat_id,
-            f"There are no entries for category {category}."
-        )
+        YOUR_BOT.sendMessage(chat_id, f"There are no entries for category {category}.")
 
     elif category == "thanks":
-        YOUR_BOT.sendMessage(
-            chat_id,
-            f"{data_to_send}"
-        )
+        YOUR_BOT.sendMessage(chat_id, f"{data_to_send}")
 
     elif category == "input":
-        YOUR_BOT.sendMessage(
-            chat_id,
-            f"{data_to_send}"
-        )
+        YOUR_BOT.sendMessage(chat_id, f"{data_to_send}")
 
     else:
         data_of_shops_to_send = "\n".join(data_to_send)
         YOUR_BOT.sendMessage(
             chat_id,
-            f"There are following entries for category {category}:\n{data_of_shops_to_send}"
+            f"There are following entries for category {category}:\n{data_of_shops_to_send}",
         )
 
 
