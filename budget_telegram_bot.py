@@ -126,8 +126,10 @@ def handle_user_input(user_profile, user_input):
 
     if "?" in user_input:
         category = user_input.split("?")[0]
-        data_to_send = [user_profile["query"]]
-        data_to_send.append(get_expenses_for_shops_of_one_category(file, category))
+        data_to_send = [
+            user_profile["query"],
+            get_expenses_for_shops_of_one_category(file, category),
+        ]
         send_message(user_chat_id, data_to_send, category)
 
     elif "Thanks" in user_input:
