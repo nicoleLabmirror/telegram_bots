@@ -111,10 +111,10 @@ def send_message(chat_id, data_to_send, category=""):
         YOUR_BOT.sendMessage(chat_id, f"{data_to_send}")
 
     else:
-        data_of_shops_to_send = "\n".join(data_to_send[:-1])
+        data_of_shops_to_send = "\n".join(data_to_send[1])
         YOUR_BOT.sendMessage(
             chat_id,
-            f"{data_to_send[-1]}\n\n"
+            f"{data_to_send[0]}\n\n"
             f"There are following entries for category {category}:\n"
             f"{data_of_shops_to_send}",
         )
@@ -126,8 +126,8 @@ def handle_user_input(user_profile, user_input):
 
     if "?" in user_input:
         category = user_input.split("?")[0]
-        data_to_send = get_expenses_for_shops_of_one_category(file, category)
-        data_to_send.append(user_profile["query"])
+        data_to_send = [user_profile["query"]]
+        data_to_send.append(get_expenses_for_shops_of_one_category(file, category))
         send_message(user_chat_id, data_to_send, category)
 
     elif "Thanks" in user_input:
