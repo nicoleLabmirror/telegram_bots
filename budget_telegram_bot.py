@@ -111,11 +111,12 @@ def send_message(chat_id, data_to_send, category=""):
         YOUR_BOT.sendMessage(chat_id, f"{data_to_send}")
 
     else:
+        current_month = dt.date.today().strftime("%B")
         data_of_shops_to_send = "\n".join(data_to_send[1])
         YOUR_BOT.sendMessage(
             chat_id,
             f"{data_to_send[0]}\n\n"
-            f"There are following entries for category {category}:\n"
+            f"There are following entries for category {category} in {current_month}:\n"
             f"{data_of_shops_to_send}",
         )
 
