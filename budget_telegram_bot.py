@@ -100,21 +100,23 @@ def write_data_to_file(file, user_input):
     df_budget.to_csv(file, index=False, header=False)
 
 
-def send_message(chat_id, data_to_send, category=""):
-    if not data_to_send:
-        YOUR_BOT.sendMessage(chat_id, f"There are no entries for category {category}.")
+def send_message(group_chat_id, data_to_send, category=""):
+    if not data_to_send[1]:
+        YOUR_BOT.sendMessage(
+            group_chat_id, f"There are no entries for category {category}."
+        )
 
     elif category == "thanks":
-        YOUR_BOT.sendMessage(chat_id, f"{data_to_send}")
+        YOUR_BOT.sendMessage(group_chat_id, f"{data_to_send}")
 
     elif category == "input":
-        YOUR_BOT.sendMessage(chat_id, f"{data_to_send}")
+        YOUR_BOT.sendMessage(group_chat_id, f"{data_to_send}")
 
     elif category == "Auto":
         current_year = dt.date.today().strftime("%Y")
         data_of_shops_to_send = "\n".join(data_to_send[1])
         YOUR_BOT.sendMessage(
-            chat_id,
+            group_chat_id,
             f"{data_to_send[0]}\n\n"
             f"There are following entries for category {category} in {current_year}:\n"
             f"{data_of_shops_to_send}",
@@ -124,16 +126,15 @@ def send_message(chat_id, data_to_send, category=""):
         current_month = dt.date.today().strftime("%B")
         data_of_shops_to_send = "\n".join(data_to_send[1])
         YOUR_BOT.sendMessage(
-            chat_id,
+            group_chat_id,
             f"{data_to_send[0]}\n\n"
             f"There are following entries for category {category} in {current_month}:\n"
             f"{data_of_shops_to_send}",
         )
 
 
-def handle_user_input(user_profile, user_input):
+def handle_user_input(user_profile, user_input, group_chat_id):
     file = user_profile["file_name"]
-    user_chat_id = user_profile["chat_id"]
 
     if "?" in user_input:
         category = user_input.split("?")[0]
@@ -141,12 +142,12 @@ def handle_user_input(user_profile, user_input):
             user_profile["query"],
             get_expenses_for_shops_of_one_category(file, category),
         ]
-        send_message(user_chat_id, data_to_send, category)
+        send_message(group_chat_id, data_to_send, category)
 
     elif "Thanks" in user_input:
         data_to_send = user_profile["thank_you"]
         category = "thanks"
-        send_message(user_chat_id, data_to_send, category)
+        send_message(group_chat_id, data_to_send, category)
 
     else:
         category = "input"
@@ -157,15 +158,17 @@ def handle_user_input(user_profile, user_input):
             float(user_input.split()[2].replace(",", ".")),
         ]
         write_data_to_file(file, user_input)
-        send_message(user_chat_id, data_to_send, category)
+        send_message(group_chat_id, data_to_send, category)
 
 
 def get_user_input(msg):
+    content_type, chat_type, group_chat_id = telepot.glance(msg)
+
     if msg["from"]["id"] == profile_1["chat_id"]:
-        handle_user_input(profile_1, msg["text"])
+        handle_user_input(profile_1, msg["text"], group_chat_id)
 
     elif msg["from"]["id"] == profile_2["chat_id"]:
-        handle_user_input(profile_2, msg["text"])
+        handle_user_input(profile_2, msg["text"], group_chat_id)
 
 
 def main():
