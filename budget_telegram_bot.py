@@ -30,14 +30,14 @@ YOUR_BOT = tb.Bot("YOUR_BOT_TOKEN")
 YOUR_BOT.getMe()
 
 
-def read_data_from_file(file):
-    df_budget = pd.read_csv(file, delimiter=",", names=headers)
+def read_data_from_file(input_file):
+    df_budget = pd.read_csv(input_file, delimiter=",", names=headers)
 
     return df_budget
 
 
-def get_monthly_expenses(file, category):
-    df_budget = read_data_from_file(file)
+def get_monthly_expenses(input_file, category):
+    df_budget = read_data_from_file(input_file)
     today = dt.date.today()
 
     index_year = pd.DatetimeIndex(df_budget["Date"]).year
@@ -52,8 +52,8 @@ def get_monthly_expenses(file, category):
     return df_budget_month
 
 
-def get_expenses_for_one_category(file, category):
-    monthly_expenses = get_monthly_expenses(file, category)
+def get_expenses_for_one_category(input_file, category):
+    monthly_expenses = get_monthly_expenses(input_file, category)
 
     monthly_expenses_for_category = monthly_expenses[
         monthly_expenses["Category"] == category
@@ -62,8 +62,8 @@ def get_expenses_for_one_category(file, category):
     return monthly_expenses_for_category
 
 
-def get_expenses_for_shops_of_one_category(file, category):
-    monthly_expenses = get_expenses_for_one_category(file, category)
+def get_expenses_for_shops_of_one_category(input_file, category):
+    monthly_expenses = get_expenses_for_one_category(input_file, category)
 
     monthly_expenses_group_by = (
         monthly_expenses.groupby(["Shop"]).sum(numeric_only=True).reset_index()
@@ -82,8 +82,8 @@ def get_expenses_for_shops_of_one_category(file, category):
     return monthly_expenses_for_shops
 
 
-def write_data_to_file(file, user_input):
-    df_budget = read_data_from_file(file)
+def write_data_to_file(input_file, user_input):
+    df_budget = read_data_from_file(input_file)
     today = dt.date.today()
 
     df_new_entry = pd.DataFrame(
@@ -97,7 +97,7 @@ def write_data_to_file(file, user_input):
 
     df_budget = pd.concat([df_budget, df_new_entry], ignore_index=True)
 
-    df_budget.to_csv(file, index=False, header=False)
+    df_budget.to_csv(input_file, index=False, header=False)
 
 
 def send_message(group_chat_id, data_to_send, category=""):
@@ -134,13 +134,13 @@ def send_message(group_chat_id, data_to_send, category=""):
 
 
 def handle_user_input(user_profile, user_input, group_chat_id):
-    file = user_profile["file_name"]
+    input_file = user_profile["file_name"]
 
     if "?" in user_input:
         category = user_input.split("?")[0]
         data_to_send = [
             user_profile["query"],
-            get_expenses_for_shops_of_one_category(file, category),
+            get_expenses_for_shops_of_one_category(input_file, category),
         ]
         send_message(group_chat_id, data_to_send, category)
 
@@ -157,7 +157,7 @@ def handle_user_input(user_profile, user_input, group_chat_id):
             user_input.split()[1],
             float(user_input.split()[2].replace(",", ".")),
         ]
-        write_data_to_file(file, user_input)
+        write_data_to_file(input_file, user_input)
         send_message(group_chat_id, data_to_send, category)
 
 
