@@ -100,6 +100,23 @@ def write_data_to_file(input_file, user_input):
     df_budget.to_csv(input_file, index=False, header=False)
 
 
+def export_xlsx(input_file):
+    df_budget = read_data_from_file(input_file)
+    today = dt.date.today()
+
+    index_year = pd.DatetimeIndex(df_budget["Date"]).year
+    df_budget_year = df_budget[index_year == today.year]
+
+    index_month = pd.DatetimeIndex(df_budget_year["Date"]).month
+    index_month_set = set(index_month)
+
+    with pd.ExcelWriter("test.xlsx") as writer:
+        for i in index_month_set:
+            j = df_budget_year[index_month==i]
+            x = j.groupby(["Category"]).sum(numeric_only=True).reset_index()
+            x.to_excel(writer, sheet_name=str(i))
+
+
 def send_message(group_chat_id, data_to_send, category=""):
     if not data_to_send[1]:
         YOUR_BOT.sendMessage(
