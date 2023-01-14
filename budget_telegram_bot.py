@@ -114,7 +114,7 @@ def export_xlsx(input_file):
         for i in index_month_set:
             j = df_budget_year[index_month==i]
             x = j.groupby(["Category"]).sum(numeric_only=True).reset_index()
-            x.to_excel(writer, sheet_name=str(i))
+            x.to_excel(writer, sheet_name=str(i), index=False)
 
 
 def send_message(group_chat_id, data_to_send, category=""):
