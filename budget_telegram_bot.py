@@ -16,6 +16,7 @@ profile_1 = {
     "thank_you": "Nice",
     "input": "VERY NICE",
     "query": "SUPER nice",
+    "xlsx": "Files!"
 }
 
 profile_2 = {
@@ -24,6 +25,7 @@ profile_2 = {
     "thank_you": "Thx",
     "input": "VERY THX",
     "query": "SUPER thx",
+    "xlsx": "Files?"
 }
 
 YOUR_BOT = tb.Bot("YOUR_BOT_TOKEN")
