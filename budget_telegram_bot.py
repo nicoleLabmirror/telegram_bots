@@ -169,7 +169,7 @@ def handle_user_input(user_profile, user_input, group_chat_id):
 
     if user_input == "Excel?":
         export_xlsx(input_file)
-        data_to_send = ["NICE", open("export.xlsx", "rb")]
+        data_to_send = [user_profile["xlsx"], open("export.xlsx", "rb")]
         category = "Excel"
         send_message(group_chat_id, data_to_send, category)
 
