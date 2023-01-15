@@ -11,7 +11,8 @@ import telepot.loop
 headers = ["Date", "Category", "Shop", "Amount"]
 
 profile_1 = {
-    "file_name": "YOUR FILE",
+    "input_file_name": "YOUR FILE",
+    "output_file_name": "YOUR FILE",
     "chat_id": "YOUR CHAT ID",
     "thank_you": "Nice",
     "input": "VERY NICE",
@@ -20,7 +21,8 @@ profile_1 = {
 }
 
 profile_2 = {
-    "file_name": "ANOTHER FILE",
+    "input_file_name": "ANOTHER FILE",
+    "output_file_name": "ANOTHER FILE",
     "chat_id": "ANOTHER CHAT ID",
     "thank_you": "Thx",
     "input": "VERY THX",
@@ -102,7 +104,7 @@ def write_data_to_file(input_file, user_input):
     df_budget.to_csv(input_file, index=False, header=False)
 
 
-def export_xlsx(input_file):
+def export_xlsx(input_file, output_file):
     df_budget = read_data_from_file(input_file)
     today = dt.date.today()
 
@@ -112,7 +114,7 @@ def export_xlsx(input_file):
     index_month = pd.DatetimeIndex(df_budget_year["Date"]).month
     index_month_set = set(index_month)
 
-    with pd.ExcelWriter("export.xlsx") as writer:
+    with pd.ExcelWriter(output_file) as writer:
         for i in index_month_set:
             df_budget_month_by_index = df_budget_year[index_month == i]
             df_budget_month_for_excel = (
@@ -168,11 +170,12 @@ def send_message(group_chat_id, data_to_send, category=""):
 
 
 def handle_user_input(user_profile, user_input, group_chat_id):
-    input_file = user_profile["file_name"]
+    input_file = user_profile["input_file_name"]
 
     if user_input == "Excel?":
-        export_xlsx(input_file)
-        data_to_send = [user_profile["xlsx"], open("export.xlsx", "rb")]
+        output_file = user_profile["output_file_name"]
+        export_xlsx(input_file, output_file)
+        data_to_send = [user_profile["xlsx"], open(output_file, "rb")]
         category = "Excel"
         send_message(group_chat_id, data_to_send, category)
 
