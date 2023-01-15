@@ -11,19 +11,23 @@ import telepot.loop
 headers = ["Date", "Category", "Shop", "Amount"]
 
 profile_1 = {
-    "file_name": "YOUR FILE",
+    "input_file_name": "YOUR FILE",
+    "output_file_name": "YOUR FILE",
     "chat_id": "YOUR CHAT ID",
     "thank_you": "Nice",
     "input": "VERY NICE",
     "query": "SUPER nice",
+    "xlsx": "Files!",
 }
 
 profile_2 = {
-    "file_name": "ANOTHER FILE",
+    "input_file_name": "ANOTHER FILE",
+    "output_file_name": "ANOTHER FILE",
     "chat_id": "ANOTHER CHAT ID",
     "thank_you": "Thx",
     "input": "VERY THX",
     "query": "SUPER thx",
+    "xlsx": "Files?",
 }
 
 YOUR_BOT = tb.Bot("YOUR_BOT_TOKEN")
@@ -100,11 +104,43 @@ def write_data_to_file(input_file, user_input):
     df_budget.to_csv(input_file, index=False, header=False)
 
 
+def export_xlsx(input_file, output_file):
+    df_budget = read_data_from_file(input_file)
+    today = dt.date.today()
+
+    index_year = pd.DatetimeIndex(df_budget["Date"]).year
+    df_budget_year = df_budget[index_year == today.year]
+
+    index_month = pd.DatetimeIndex(df_budget_year["Date"]).month
+    index_month_set = set(index_month)
+
+    with pd.ExcelWriter(output_file) as writer:
+        for i in index_month_set:
+            df_budget_month_by_index = df_budget_year[index_month == i]
+            df_budget_month_for_excel = (
+                df_budget_month_by_index.groupby(["Category"])
+                .sum(numeric_only=True)
+                .reset_index()
+            )
+            month_name_for_sheet = dt.datetime(today.year, i, 1).strftime("%B")
+            df_budget_month_for_excel.to_excel(
+                writer, sheet_name=month_name_for_sheet, index=False
+            )
+
+
 def send_message(group_chat_id, data_to_send, category=""):
+    print(data_to_send)
     if not data_to_send[1]:
         YOUR_BOT.sendMessage(
             group_chat_id, f"There are no entries for category {category}."
         )
+
+    elif category == "Excel":
+        YOUR_BOT.sendMessage(
+            group_chat_id,
+            data_to_send[0],
+        )
+        YOUR_BOT.sendDocument(group_chat_id, data_to_send[1])
 
     elif category == "thanks":
         YOUR_BOT.sendMessage(group_chat_id, f"{data_to_send}")
@@ -134,9 +170,16 @@ def send_message(group_chat_id, data_to_send, category=""):
 
 
 def handle_user_input(user_profile, user_input, group_chat_id):
-    input_file = user_profile["file_name"]
+    input_file = user_profile["input_file_name"]
 
-    if "?" in user_input:
+    if user_input == "Excel?":
+        output_file = user_profile["output_file_name"]
+        export_xlsx(input_file, output_file)
+        data_to_send = [user_profile["xlsx"], open(output_file, "rb")]
+        category = "Excel"
+        send_message(group_chat_id, data_to_send, category)
+
+    elif "?" in user_input:
         category = user_input.split("?")[0]
         data_to_send = [
             user_profile["query"],
