@@ -133,7 +133,7 @@ def send_message(group_chat_id, data_to_send, category=""):
     elif category == "Excel":
         YOUR_BOT.sendMessage(
             group_chat_id,
-            f"This file!",
+            data_to_send[0],
         )
         YOUR_BOT.sendDocument(group_chat_id, data_to_send[1])
 
