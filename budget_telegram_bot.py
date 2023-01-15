@@ -110,7 +110,7 @@ def export_xlsx(input_file):
     index_month = pd.DatetimeIndex(df_budget_year["Date"]).month
     index_month_set = set(index_month)
 
-    with pd.ExcelWriter("test.xlsx") as writer:
+    with pd.ExcelWriter("export.xlsx") as writer:
         for i in index_month_set:
             j = df_budget_year[index_month==i]
             x = j.groupby(["Category"]).sum(numeric_only=True).reset_index()
@@ -118,6 +118,7 @@ def export_xlsx(input_file):
 
 
 def send_message(group_chat_id, data_to_send, category=""):
+    print(data_to_send)
     if not data_to_send[1]:
         YOUR_BOT.sendMessage(
             group_chat_id, f"There are no entries for category {category}."
@@ -153,7 +154,16 @@ def send_message(group_chat_id, data_to_send, category=""):
 def handle_user_input(user_profile, user_input, group_chat_id):
     input_file = user_profile["file_name"]
 
-    if "?" in user_input:
+    if user_input == "Excel?":
+        export_xlsx(input_file)
+        data_to_send = [
+            "NICE",
+            open("export.xlsx", "rb")
+        ]
+        category = "Excel"
+        send_message(group_chat_id, data_to_send, category)
+
+    elif "?" in user_input:
         category = user_input.split("?")[0]
         data_to_send = [
             user_profile["query"],
