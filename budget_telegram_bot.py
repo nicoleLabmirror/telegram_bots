@@ -112,9 +112,13 @@ def export_xlsx(input_file):
 
     with pd.ExcelWriter("export.xlsx") as writer:
         for i in index_month_set:
-            j = df_budget_year[index_month==i]
-            x = j.groupby(["Category"]).sum(numeric_only=True).reset_index()
-            x.to_excel(writer, sheet_name=str(i), index=False)
+            df_budget_month_by_index = df_budget_year[index_month == i]
+            df_budget_month_for_excel = (
+                df_budget_month_by_index.groupby(["Category"])
+                .sum(numeric_only=True)
+                .reset_index()
+            )
+            df_budget_month_for_excel.to_excel(writer, sheet_name=str(i), index=False)
 
 
 def send_message(group_chat_id, data_to_send, category=""):
@@ -129,10 +133,7 @@ def send_message(group_chat_id, data_to_send, category=""):
             group_chat_id,
             f"This file!",
         )
-        YOUR_BOT.sendDocument(
-            group_chat_id,
-            data_to_send[1]
-        )
+        YOUR_BOT.sendDocument(group_chat_id, data_to_send[1])
 
     elif category == "thanks":
         YOUR_BOT.sendMessage(group_chat_id, f"{data_to_send}")
@@ -166,10 +167,7 @@ def handle_user_input(user_profile, user_input, group_chat_id):
 
     if user_input == "Excel?":
         export_xlsx(input_file)
-        data_to_send = [
-            "NICE",
-            open("export.xlsx", "rb")
-        ]
+        data_to_send = ["NICE", open("export.xlsx", "rb")]
         category = "Excel"
         send_message(group_chat_id, data_to_send, category)
 
