@@ -16,7 +16,7 @@ profile_1 = {
     "thank_you": "Nice",
     "input": "VERY NICE",
     "query": "SUPER nice",
-    "xlsx": "Files!"
+    "xlsx": "Files!",
 }
 
 profile_2 = {
@@ -25,7 +25,7 @@ profile_2 = {
     "thank_you": "Thx",
     "input": "VERY THX",
     "query": "SUPER thx",
-    "xlsx": "Files?"
+    "xlsx": "Files?",
 }
 
 YOUR_BOT = tb.Bot("YOUR_BOT_TOKEN")
@@ -120,7 +120,10 @@ def export_xlsx(input_file):
                 .sum(numeric_only=True)
                 .reset_index()
             )
-            df_budget_month_for_excel.to_excel(writer, sheet_name=str(i), index=False)
+            month_name_for_sheet = dt.datetime(today.year, i, 1).strftime("%B")
+            df_budget_month_for_excel.to_excel(
+                writer, sheet_name=month_name_for_sheet, index=False
+            )
 
 
 def send_message(group_chat_id, data_to_send, category=""):
