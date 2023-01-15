@@ -124,6 +124,16 @@ def send_message(group_chat_id, data_to_send, category=""):
             group_chat_id, f"There are no entries for category {category}."
         )
 
+    elif category == "Excel":
+        YOUR_BOT.sendMessage(
+            group_chat_id,
+            f"This file!",
+        )
+        YOUR_BOT.sendDocument(
+            group_chat_id,
+            data_to_send[1]
+        )
+
     elif category == "thanks":
         YOUR_BOT.sendMessage(group_chat_id, f"{data_to_send}")
 
