@@ -117,11 +117,20 @@ def export_xlsx(input_file, output_file):
     with pd.ExcelWriter(output_file) as writer:
         for i in index_month_set:
             df_budget_month_by_index = df_budget_year[index_month == i]
-            df_budget_month_for_excel = (
+            df_budget_month = (
                 df_budget_month_by_index.groupby(["Category"])
                 .sum(numeric_only=True)
                 .reset_index()
             )
+
+            df_total_amount = pd.DataFrame(
+                {"Category": "Total", "Amount": [df_budget_month["Amount"].sum()]}
+            )
+
+            df_budget_month_for_excel = pd.concat(
+                [df_budget_month, df_total_amount], ignore_index=True
+            )
+
             month_name_for_sheet = dt.datetime(today.year, i, 1).strftime("%B")
             df_budget_month_for_excel.to_excel(
                 writer, sheet_name=month_name_for_sheet, index=False
