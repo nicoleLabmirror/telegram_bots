@@ -176,11 +176,11 @@ def send_message(group_chat_id, data_to_send, category=""):
 
     else:
         current_month = dt.date.today().strftime("%B")
-        data_of_shops_to_send = "\n".join(data_to_send[2])
+        data_of_shops_to_send = "\n".join(data_to_send[1])
         YOUR_BOT.sendMessage(
             group_chat_id,
             f"{data_to_send[0]}\n\n"
-            f"Total expenses for {category} in {current_month}: {data_to_send[1]}\n\n"
+            f"Total expenses for {category} in {current_month}: {data_to_send[2]}\n\n"
             f"There are following entries for category {category} :\n"
             f"{data_of_shops_to_send}",
         )
@@ -200,8 +200,8 @@ def handle_user_input(user_profile, user_input, group_chat_id):
         category = user_input.split("?")[0]
         data_to_send = [
             user_profile["query"],
-            get_total_sum_of_category(input_file, category),
             get_expenses_for_shops_of_one_category(input_file, category),
+            get_total_sum_of_category(input_file, category),
         ]
         send_message(group_chat_id, data_to_send, category)
 
