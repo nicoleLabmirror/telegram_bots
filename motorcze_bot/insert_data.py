@@ -2,7 +2,7 @@ import sqlite3
 from sqlite3 import Error
 
 INSERT_PERSON = """
-    INSERT INTO person(name) VALUES(?)
+    INSERT INTO person(name, chat_id) VALUES(?,?)
 """
 
 INSERT_ROUTE = """
@@ -10,7 +10,7 @@ INSERT_ROUTE = """
 """
 
 SELECT_PERSON = """
-    SELECT * FROM person WHERE id=?
+    SELECT id FROM person WHERE chat_id=?
 """
 
 
@@ -35,9 +35,12 @@ def create_data(conn, sql, data):
 def read_data(conn, sql, data):
     cur = conn.cursor()
     cur.execute(sql, data)
-    result = cur.fetchall()
+    result = cur
 
     return result
+
+
+db_file = "motorcze_test.db"
 
 
 def main():
@@ -45,14 +48,17 @@ def main():
 
     conn = create_connection(database)
     with conn:
-        person = read_data(conn, SELECT_PERSON, "1")
-        person_id = person[0][0]
+        person = read_data(conn, SELECT_PERSON, (326247323,))
+        print(person)
+        # person_id = person[0][0]
 
-        route_1 = ("Testfahrt", 31, person_id)
+        # route_1 = ("Testfahrt", 31, person_id)
         route_2 = ("Ausfahrt", 40, person_id)
 
-        create_data(conn, INSERT_ROUTE, route_1)
-        create_data(conn, INSERT_ROUTE, route_2)
+        # person_1 = ("Klaus", 326247323)
+        # create_data(conn, INSERT_PERSON, person_1)
+        # create_data(conn, INSERT_ROUTE, route_1)
+        # create_data(conn, INSERT_ROUTE, route_2)
 
 
 if __name__ == "__main__":
