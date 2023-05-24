@@ -27,7 +27,8 @@ def main():
     sql_create_person_table = """
         CREATE TABLE IF NOT EXISTS person (
             id integer PRIMARY KEY,
-            name text NOT NULL
+            name text NOT NULL,
+            chat_id integer NOT NULL
         );
     """
 
