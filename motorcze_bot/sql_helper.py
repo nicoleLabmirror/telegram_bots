@@ -27,6 +27,7 @@ def create_connection(db_file):
 def read_route_data_from_db(data):
     conn = create_connection(DB_FILE)
     cur = conn.cursor()
+    # TODO: this can't be right. It works but ...   
     data["year"] = str(data["year"]) + "-%"
     cur.execute(SELECT_ROUTE, data)
     result = cur.fetchall()
