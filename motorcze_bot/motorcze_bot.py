@@ -24,11 +24,25 @@ def handle_message(user_text, user_id):
         text = read_route_data(user_id)
     else:
         write_route_data(user_text, user_id)
-        text = "Route eingetragen"
+        text = "Route eingetragen."
 
     send_message(text)
 
 
+def format_text(func):
+    def inner(*args):
+        read_data = func(*args)
+        text_list = [f"Für die Saison {read_data[1]} gab es folgende Ausfahrten:\n"]
+        for row in read_data[0]:
+            new_row = f"Datum: {row[0]}\nStrecke: {row[1]}\nDistanz: {row[2]} km\n"
+            text_list.append(new_row)
+        text_str = "\n".join(text_list)
+
+        return text_str
+    return inner
+
+
+@format_text
 def read_route_data(user_id):
     today_year = dt.date.today().year
     read_route = {
@@ -37,7 +51,7 @@ def read_route_data(user_id):
     }
     data = read_route_data_from_db(read_route)
 
-    return data
+    return data, today_year
 
 
 def write_route_data(user_text, user_id):
@@ -50,9 +64,7 @@ def write_route_data(user_text, user_id):
         "distance": route_distance,
         "person_id": user_id,
     }
-    data = write_route_data_to_db(new_route)
-
-    return data
+    write_route_data_to_db(new_route)
 
 
 def send_message(text):
