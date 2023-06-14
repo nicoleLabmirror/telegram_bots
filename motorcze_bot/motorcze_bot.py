@@ -32,13 +32,17 @@ def handle_message(user_text, user_id):
 def format_text(func):
     def inner(*args):
         read_data = func(*args)
+
         text_list = [f"Für die Saison {read_data[1]} gab es folgende Ausfahrten:\n"]
         for row in read_data[0]:
             new_row = f"Datum: {row[0]}\nStrecke: {row[1]}\nDistanz: {row[2]} km\n"
             text_list.append(new_row)
+        text_list.append(f"Die Gesamtdistanz beträgt {str(read_data[2])} km.")
+
         text_str = "\n".join(text_list)
 
         return text_str
+
     return inner
 
 
@@ -51,7 +55,9 @@ def read_route_data(user_id):
     }
     data = read_route_data_from_db(read_route)
 
-    return data, today_year
+    total_distance = sum([row[2] for row in data])
+
+    return data, today_year, total_distance
 
 
 def write_route_data(user_text, user_id):
