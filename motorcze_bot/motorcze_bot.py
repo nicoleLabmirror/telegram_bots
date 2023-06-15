@@ -55,7 +55,7 @@ def read_route_data(user_id):
     }
     data = read_route_data_from_db(read_route)
 
-    total_distance = sum([row[2] for row in data])
+    total_distance = round(sum([row[2] for row in data]), 2)
 
     return data, today_year, total_distance
 
